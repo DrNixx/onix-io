@@ -1,0 +1,40 @@
+{
+  "name": "onix-io",
+  "version": "1.0.0",
+  "description": "Onix network utilities",
+  "main": "built/index.js",
+  "scripts": {
+    "build": "tsc && webpack",
+    "webpack": "webpack",
+    "publish": "tsc && webpack --config webpack.production.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrNixx/onix-io.git"
+  },
+  "keywords": [
+    "onix",
+    "io",
+    "network",
+    "websocket",
+    "webevent"
+  ],
+  "author": "Nick Panteleeff",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DrNixx/onix-io/issues"
+  },
+  "homepage": "https://github.com/DrNixx/onix-io#readme",
+  "dependencies": {
+    "onix-core": "^1.1.18",
+    "rxjs": "^5.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.12",
+    "source-map-loader": "^0.2.1",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.2.2",
+    "webpack": "^2.3.3"
+  }
+}

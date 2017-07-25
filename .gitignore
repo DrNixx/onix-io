@@ -1,0 +1,7 @@
+node_modules
+built
+.vscode
+/onix-io.js
+/onix-io.js.map
+
+npm-debug.log

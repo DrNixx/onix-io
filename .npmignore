@@ -1,0 +1,12 @@
+/node_modules
+/samples
+/src/scss
+/test
+/tsconfig.json
+/*.config.js
+/*.js.map
+/.gitattributes
+/.gitignore
+/.npmignore
+/.vscode
+debug.log
