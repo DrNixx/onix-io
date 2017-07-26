@@ -7,7 +7,7 @@ module.exports = {
 
     output: {
         libraryTarget: "umd",
-        library: "onix.io",
+        library: "onix",
         filename: "./onix-io.js",
     },
 
