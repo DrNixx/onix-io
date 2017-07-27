@@ -1,10 +1,6 @@
 import { Observable, AnonymousSubject, Subject, BehaviorSubject, Subscription, Subscriber, AjaxResponse } from 'rxjs';
 import { Logger } from 'onix-core';
-import { IError } from "./IError";
-import { ConnectionStatus } from "./ConnectionStatus";
-import { MessageType } from "./MessageType";
-import { IStreamMessage } from "./IStreamMessage";
-import { IStream } from "./IStream";
+import { IStream, IStreamMessage, MessageType, ConnectionStatus } from "onix-app";
 import { Event, EventArgs, EventHandler, Event1, EventArgs1, EventHandler1 } from 'onix-core';
 import { isDate, isString, dateToUTCString, trim } from 'onix-core';
 

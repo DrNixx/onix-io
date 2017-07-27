@@ -1,5 +1,5 @@
 import { IEventArgs, EventHandler } from 'onix-core';
-import { IStream } from "./IStream";
+import { IStream } from "onix-app";
 import { stdDeviation, average } from 'onix-core';
 import { Logger } from 'onix-core';
 
