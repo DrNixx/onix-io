@@ -1,6 +1,10 @@
 import { Observable, AnonymousSubject, Subject, BehaviorSubject, Subscription, Subscriber, AjaxResponse } from 'rxjs';
 import { Logger } from 'onix-core';
-import { IError, ConnectionStatus, MessageType, IServerMessage, IServerAdapter } from "./Types";
+import { IError } from "./IError";
+import { ConnectionStatus } from "./ConnectionStatus";
+import { MessageType } from "./MessageType";
+import { IStreamMessage } from "./IStreamMessage";
+import { IStream } from "./IStream";
 import { Event, EventArgs, EventHandler, Event1, EventArgs1, EventHandler1 } from 'onix-core';
 import { isDate, isString, dateToUTCString, trim } from 'onix-core';
 
@@ -148,7 +152,7 @@ export interface IPushStreamSettings {
 
 export var PushStreamManager: PushStream[] = [];
 
-export class PushStream implements IServerAdapter {
+export class PushStream implements IStream {
     private id: number;
     private useSSL: boolean;
     private host: string;
@@ -188,7 +192,7 @@ export class PushStream implements IServerAdapter {
     private channelsArgument: string;
 
     private channels: {
-        [channelName: string]: Subject<IServerMessage>;
+        [channelName: string]: Subject<IStreamMessage>;
     } = {};
 
     private channelCount: {
@@ -207,7 +211,7 @@ export class PushStream implements IServerAdapter {
 
     public transports: TransportType[] = [];
 
-    public activity$: Observable<IServerMessage> = null;
+    public activity$: Observable<IStreamMessage> = null;
 
     private listenerSubscription: Subscription = null;
 
@@ -280,7 +284,7 @@ export class PushStream implements IServerAdapter {
         }
     }
 
-    public subscribe(name: string, message: (value: IServerMessage) => void, error?: (error: any) => void, complete?: () => void) {
+    public subscribe(name: string, message: (value: IStreamMessage) => void, error?: (error: any) => void, complete?: () => void) {
         if (escapeText(name) !== name) {
             throw new Error("Invalid channel name! Channel has to be a set of [a-zA-Z0-9]");
         }
@@ -289,7 +293,7 @@ export class PushStream implements IServerAdapter {
 
         let channel = this.channels[name];
         if (typeof channel === "undefined") {
-            channel = new Subject<IServerMessage>();            
+            channel = new Subject<IStreamMessage>();            
             this.channels[name] = channel;
             this.channelCount[name] = 0;
             this.totalCount++;
@@ -419,13 +423,13 @@ export class PushStream implements IServerAdapter {
         }
     }
 
-    private publishToChannel(message: IServerMessage) {
+    private publishToChannel(message: IStreamMessage) {
         if (this.channels[message.channel]) {
             this.channels[message.channel].next(message);
         }
     }
 
-    private doOnMessage = (message: IServerMessage) => {
+    private doOnMessage = (message: IStreamMessage) => {
         if (message.tag) { 
             this._etag = message.tag; 
         }
@@ -451,7 +455,7 @@ export class PushStream implements IServerAdapter {
     };
 
 
-    private getActivity$(): Observable<IServerMessage> {
+    private getActivity$(): Observable<IStreamMessage> {
         const transport = this.transports[0];
         switch (transport) {
             case TransportType.WebSocket:
@@ -601,7 +605,7 @@ export class PushStream implements IServerAdapter {
         );
     }
 
-    private observableMessage(message: IServerMessage) {
+    private observableMessage(message: IStreamMessage) {
         if (message) {
             if (message.tag) { 
                 this._etag = message.tag; 
@@ -672,10 +676,10 @@ export class PushStream implements IServerAdapter {
         return once ? obs.take(1) : obs;
     }
 
-    private activityLongPooling$(): Observable<IServerMessage> {
+    private activityLongPooling$(): Observable<IStreamMessage> {
         return this.checkConnection()
             .flatMap(_ => 
-                this.transportLongPolling<IServerMessage>()
+                this.transportLongPolling<IStreamMessage>()
                 .repeat()
                 .retryWhen(error$ => error$
                     .mergeMap(error => {
@@ -691,7 +695,7 @@ export class PushStream implements IServerAdapter {
             )
             .flatMap(message => this.observableMessage(message))
             .catch(error => {
-                return Observable.empty<IServerMessage>();
+                return Observable.empty<IStreamMessage>();
             });
     }
 
@@ -736,10 +740,10 @@ export class PushStream implements IServerAdapter {
         }) as Observable<T>;        
     }
 
-    private activityWebSocket$(): Observable<IServerMessage> {
+    private activityWebSocket$(): Observable<IStreamMessage> {
         return this.checkConnection()
             .flatMap(_ =>
-                this.transportWebSocket<IServerMessage>()
+                this.transportWebSocket<IStreamMessage>()
                     // .retryWhen(error$ => error$.mergeMap(error => this.reconnectToConversation()))
             )
             .flatMap(message => this.observableMessage(message))
@@ -790,10 +794,10 @@ export class PushStream implements IServerAdapter {
         }) as Observable<T>;
     }
 
-    private activityEventSource$(): Observable<IServerMessage> {
+    private activityEventSource$(): Observable<IStreamMessage> {
         return this.checkConnection()
             .flatMap(_ =>
-                this.transportEventSource<IServerMessage>().share()
+                this.transportEventSource<IStreamMessage>().share()
                     // .retryWhen(error$ => error$.mergeMap(error => this.reconnectToConversation()))
             )
             .flatMap(message => this.observableMessage(message));

@@ -1,5 +1,5 @@
 import { IEventArgs, EventHandler } from 'onix-core';
-import { IServerAdapter } from "./Types";
+import { IStream } from "./IStream";
 import { stdDeviation, average } from 'onix-core';
 import { Logger } from 'onix-core';
 
@@ -14,7 +14,7 @@ export class LatencyResolver {
     private label: string;
 
 
-    constructor(adapter: IServerAdapter) {
+    constructor(adapter: IStream) {
         this.tryCount = 0;
         this.requestedAt = null;
         this.pingData = [];
