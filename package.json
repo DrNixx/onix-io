@@ -1,6 +1,6 @@
 {
   "name": "onix-io",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Onix network utilities",
   "main": "built/index.js",
   "scripts": {
@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/DrNixx/onix-io#readme",
   "dependencies": {
-    "onix-app": "^1.0.3",
-    "onix-core": "^1.1.21",
-    "rxjs": "^5.4.2"
+    "onix-app": "^1.0.5",
+    "onix-core": "^1.1.27",
+    "rxjs": "^5.4.3"
   },
   "devDependencies": {
     "@types/node": "^7.0.12",
