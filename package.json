@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc && webpack",
     "webpack": "webpack",
-    "publish": "tsc && webpack --config webpack.production.config.js",
+    "produce": "tsc && webpack --config webpack.production.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
