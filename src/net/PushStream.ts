@@ -7,6 +7,7 @@ import { Logger } from 'onix-core';
 import { IStream, IStreamMessage, MessageType, ConnectionStatus } from "onix-app";
 import { Event, EventArgs, EventHandler, Event1, EventArgs1, EventHandler1 } from 'onix-core';
 import { dateToUTCString } from 'onix-core';
+import { IPushStreamSettings } from './IPushStreamSettings';
 
 const errorExpiredToken = new Error("expired token");
 const errorConversationEnded = new Error("conversation ended");
@@ -109,45 +110,6 @@ export enum TransportType {
     EventSource,
     LongPolling,
     Straming
-}
-
-export interface IPushStreamSettings {
-    useSSL?: boolean;
-    host?: string;
-    port?: number;
-
-    timeout?: number;
-    pinginterval?: number;
-    reconnectInterval?: number;
-    autoReconnect?: boolean;
-
-    lastEventId?: string;
-    messagesPublishedAfter?: number;
-    messagesControlByArgument?: boolean;
-    tagArgument?: string;
-    timeArgument?: string;
-    eventIdArgument?: string;
-    useJSONP?: boolean;
-
-    urlPrefixPublisher?: string;
-    urlPrefixStream?: string;
-    urlPrefixEventsource?: string;
-    urlPrefixLongpolling?: string;
-    urlPrefixWebsocket?: string;
-
-    jsonIdKey?: string;
-    jsonChannelKey?: string;
-    jsonTextKey?: string;
-    jsonTagKey?: string;
-    jsonTimeKey?: string;
-    jsonEventIdKey?: string;
-
-    modes?: string;
-
-    channelsByArgument?: boolean;
-    channelsArgument?: string;
-
-    extraParams?: () => any;
 }
 
 export var PushStreamManager: PushStream[] = [];
