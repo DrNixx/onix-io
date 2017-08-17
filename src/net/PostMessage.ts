@@ -1,4 +1,4 @@
-import { isFunction } from 'onix-core';
+import isFunction = require('lodash/isFunction');
 
 // A few vars used in non-awesome browsers.
 let last_hash = null;

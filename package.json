@@ -1,8 +1,9 @@
 {
   "name": "onix-io",
-  "version": "1.0.7",
+  "version": "1.1.8",
   "description": "Onix network utilities",
   "main": "built/index.js",
+  "types": "built/index.d.ts",
   "scripts": {
     "build": "tsc && webpack",
     "webpack": "webpack",
@@ -27,14 +28,16 @@
   },
   "homepage": "https://github.com/DrNixx/onix-io#readme",
   "dependencies": {
-    "onix-app": "^1.0.5",
-    "onix-core": "^1.1.27",
+    "lodash": "^4.17.4",
+    "onix-app": "^1.0.8",
+    "onix-core": "^1.2.28",
     "rxjs": "^5.4.3"
   },
   "devDependencies": {
-    "@types/node": "^7.0.12",
+    "@types/lodash": "^4.14.73",
+    "@types/node": "^7.0.42",
     "source-map-loader": "^0.2.1",
-    "ts-loader": "^2.3.2",
+    "ts-loader": "^2.3.3",
     "typescript": "^2.2.2",
     "webpack": "^2.3.3"
   }

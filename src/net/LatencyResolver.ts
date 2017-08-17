@@ -1,6 +1,7 @@
+import mean = require('lodash/mean');
 import { IEventArgs, EventHandler } from 'onix-core';
 import { IStream } from "onix-app";
-import { stdDeviation, average } from 'onix-core';
+import { stdDeviation } from 'onix-core';
 import { Logger } from 'onix-core';
 
 var REQUEST_PING_EVERY = 5;
@@ -34,7 +35,7 @@ export class LatencyResolver {
         var validItemCount = 0,
             totalValue = 0,
             standardDeviation = stdDeviation(this.pingData),
-            baseAverage = average(this.pingData);
+            baseAverage = mean(this.pingData);
 
         for (var i = 0; i < this.pingData.length; i++) {
             if (Math.abs(this.pingData[i] - baseAverage) <= standardDeviation) {
