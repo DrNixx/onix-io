@@ -29,7 +29,7 @@
   "homepage": "https://github.com/DrNixx/onix-io#readme",
   "dependencies": {
     "lodash": "^4.17.4",
-    "onix-app": "^1.0.8",
+    "onix-app": "^1.0.9",
     "onix-core": "^1.2.28",
     "rxjs": "^5.4.3"
   },
@@ -38,7 +38,7 @@
     "@types/node": "^7.0.42",
     "source-map-loader": "^0.2.1",
     "ts-loader": "^2.3.3",
-    "typescript": "^2.2.2",
+    "typescript": "^2.5.0",
     "webpack": "^2.3.3"
   }
 }
