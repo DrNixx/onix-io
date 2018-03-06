@@ -27,6 +27,11 @@ const extend = (...args: any[]) => {
     return object;
 };
 
+export interface IRequestHeaders {
+    "If-None-Match"?: string,
+    "If-Modified-Since"?: string
+}
+
 const objectToUrlParams = (settings): string => {
     let params = [];
     if (typeof(settings) === 'object') {
@@ -528,12 +533,12 @@ export class PushStream implements IStream {
         return url;
     }
 
-    public getRequestHeaders() {
+    public getRequestHeaders(): IRequestHeaders {
         return (!this.messagesControlByArgument) ?
             { 
                 "If-None-Match": this._etag,
                 "If-Modified-Since": this._lastModified
-            } : {}
+            } : {};
     }
 
     public sendMessage(message: string, successCallback: () => void, errorCallback: () => void) {

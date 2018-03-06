@@ -1,6 +1,6 @@
 {
   "name": "onix-io",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "Onix network utilities",
   "main": "built/index.js",
   "types": "built/index.d.ts",
