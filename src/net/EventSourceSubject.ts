@@ -170,7 +170,7 @@ export class EventSourceSubject<T> extends AnonymousSubject<T> {
     };
   }
 
-  protected _subscribe(subscriber: Subscriber<T>): Subscription {
+  public _subscribe(subscriber: Subscriber<T>): Subscription {
     const { source } = this;
     if (source) {
       return source.subscribe(subscriber);
