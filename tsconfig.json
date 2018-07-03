@@ -1,15 +1,21 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "moduleResolution": "node",
+        "module": "esnext",
         "target": "es5",
-        "lib": ["es2017", "dom"],
+        "lib": ["dom", "es2015.promise", "es2017"],
         "noImplicitAny": false,
-        "outDir": "./dist",
         "jsx": "react",
         "sourceMap": true,
         "declaration": true,
+        "strict": true,
+        "strictNullChecks": false,
+        "importHelpers": true,
+        "preserveConstEnums": true,
+        "removeComments": false,
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
+        "outDir": "./dist"
     },
     "files": [
         "src/index.ts"

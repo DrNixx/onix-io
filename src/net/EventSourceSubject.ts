@@ -1,15 +1,13 @@
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import { Subscription } from 'rxjs/Subscription';
-import { Subscriber } from 'rxjs/Subscriber';
-import { Subject, AnonymousSubject } from 'rxjs/Subject';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Operator } from 'rxjs/Operator';
-import { NextObserver } from 'rxjs/Observer';
-import { assign } from 'rxjs/util/assign';
-import { root } from 'rxjs/util/root';
-import { tryCatch } from 'rxjs/util/tryCatch';
-import { errorObject } from 'rxjs/util/errorObject';
+import { Observable } from 'rxjs/internal/Observable';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { Subscriber } from 'rxjs/internal/Subscriber';
+import { Subject, AnonymousSubject } from 'rxjs/internal/Subject';
+import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
+import { Operator } from 'rxjs/internal/Operator';
+import { Observer, NextObserver } from 'rxjs/internal/types';
+import { root } from 'rxjs/internal/util/root';
+import { tryCatch } from 'rxjs/internal/util/tryCatch';
+import { errorObject } from 'rxjs/internal/util/errorObject';
 
 export interface EventSourceSubjectConfig {
   url: string;
@@ -20,12 +18,11 @@ export interface EventSourceSubjectConfig {
 }
 
 export class EventSourceSubject<T> extends AnonymousSubject<T> {
-
-  url: string;
-  eventSource: any;
-  openObserver: NextObserver<Event>;
-  closeObserver: NextObserver<void>;
-  EventSourceCtor: { new(url: string): any };
+  public url: string;
+  public eventSource: any;
+  public openObserver: NextObserver<Event>;
+  public closeObserver: NextObserver<void>;
+  public EventSourceCtor: { new(url: string): any };
 
   private _output: Subject<T>;
 
@@ -55,7 +52,11 @@ export class EventSourceSubject<T> extends AnonymousSubject<T> {
         this.url = urlConfigOrSource;
       } else {
         // WARNING: config object could override important members here.
-        assign(this, urlConfigOrSource);
+        for (var key in urlConfigOrSource) {
+          if (urlConfigOrSource.hasOwnProperty(key)) {
+              this[key] = urlConfigOrSource[key];
+          }
+        }
       }
       if (!this.EventSourceCtor) {
         throw new Error('no EventSource constructor can be found');

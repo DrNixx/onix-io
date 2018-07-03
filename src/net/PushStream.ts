@@ -1,5 +1,5 @@
-import isString = require('lodash/isString');
-import isDate = require('lodash/isDate');
+import isString from 'lodash-es/isString';
+import isDate from 'lodash-es/isDate';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -679,7 +679,7 @@ export class PushStream implements IStream {
             )
             .flatMap(message => this.observableMessage(message))
             .catch(error => {
-                return Observable.empty<IStreamMessage>();
+                return Observable.of(null);
             });
     }
 

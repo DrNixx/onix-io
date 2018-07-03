@@ -1,4 +1,4 @@
-import isFunction = require('lodash/isFunction');
+import isFunction from 'lodash-es/isFunction';
 
 // A few vars used in non-awesome browsers.
 let last_hash = null;

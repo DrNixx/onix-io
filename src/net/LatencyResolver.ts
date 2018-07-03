@@ -1,5 +1,5 @@
-import mean = require('lodash/mean');
-import { IEventArgs, EventHandler } from 'onix-core';
+import mean from 'lodash-es/mean';
+import { IEventArgs } from 'onix-core';
 import { IStream } from "onix-app";
 import { stdDeviation } from 'onix-core';
 import { Logger } from 'onix-core';

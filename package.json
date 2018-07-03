@@ -1,6 +1,6 @@
 {
   "name": "onix-io",
-  "version": "1.5.17",
+  "version": "1.6.18",
   "description": "Onix network utilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,6 +8,7 @@
     "build": "tsc",
     "webpack": "webpack --config webpack.config.js",
     "stats": "webpack --profile --json > stats.json",
+    "statsp": "webpack --profile --json --mode=production > stats.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,13 +29,14 @@
   },
   "homepage": "https://github.com/DrNixx/onix-io#readme",
   "dependencies": {
-    "lodash": "^4.17.5",
-    "onix-app": "^1.4.18",
-    "onix-core": "^1.3.35",
-    "rxjs": "^5.5.6"
+    "lodash-es": "^4.17.10",
+    "onix-app": "^1.5.19",
+    "onix-core": "^1.6.39",
+    "rxjs": "^6.2.1",
+    "rxjs-compat": "^6.2.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.110",
+    "@types/lodash-es": "^4.17.0",
     "@types/node": "^7.0.66",
     "clean-webpack-plugin": "^0.1.19",
     "ts-loader": "^4.4.2",
