@@ -1,7 +1,9 @@
+.vscode
 node_modules
 dist
-.vscode
-/onix-io.js
-/onix-io.js.map
 
+/public/**/*.js
+/public/**/*.js.map
+
+stats.json
 npm-debug.log

@@ -1,11 +1,28 @@
-import isFunction = require('lodash/isFunction');
 import isString = require('lodash/isString');
 import isDate = require('lodash/isDate');
-import trim = require('lodash/trim');
-import { Observable, AnonymousSubject, Subject, BehaviorSubject, Subscription, Subscriber, AjaxResponse } from 'rxjs';
+
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { Subscriber } from 'rxjs/Subscriber';
+import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AjaxResponse } from 'rxjs/observable/dom/AjaxObservable';
+import 'rxjs/add/observable/dom/ajax';
+import 'rxjs/add/observable/empty';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/repeat';
+import 'rxjs/add/operator/retryWhen';
+import 'rxjs/add/operator/share';
+import 'rxjs/add/operator/take';
+
 import { Logger } from 'onix-core';
 import { IStream, IStreamMessage, MessageType, ConnectionStatus } from "onix-app";
-import { Event, EventArgs, EventHandler, Event1, EventArgs1, EventHandler1 } from 'onix-core';
 import { dateToUTCString } from 'onix-core';
 import { IPushStreamSettings } from './IPushStreamSettings';
 
