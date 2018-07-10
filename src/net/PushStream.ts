@@ -631,7 +631,7 @@ export class PushStream implements IStream {
 
     private checkConnection(once = false) {
         let obs = this.connectionStatus$
-        .flatMap(connectionStatus => {
+        .mergeMap(connectionStatus => {
             if (connectionStatus === ConnectionStatus.Uninitialized) {
                 this.connectionStatus$.next(ConnectionStatus.Connecting);
                 return this.startConversation()
@@ -646,7 +646,7 @@ export class PushStream implements IStream {
             }
         })
         .filter(connectionStatus => connectionStatus != ConnectionStatus.Uninitialized && connectionStatus != ConnectionStatus.Connecting)
-        .flatMap(connectionStatus => {
+        .mergeMap(connectionStatus => {
             switch (connectionStatus) {
                 case ConnectionStatus.Offline:
                     return Observable.throw(errorConversationEnded);
@@ -664,7 +664,7 @@ export class PushStream implements IStream {
 
     private activityLongPooling$(): Observable<IStreamMessage> {
         return this.checkConnection()
-            .flatMap(_ => 
+            .mergeMap(_ => 
                 this.transportLongPolling<IStreamMessage>()
                 .repeat()
                 .retryWhen(error$ => error$
@@ -679,7 +679,7 @@ export class PushStream implements IStream {
                     .delay(1)
                 )
             )
-            .flatMap(message => this.observableMessage(message))
+            .mergeMap(message => this.observableMessage(message))
             .catch(error => {
                 return Observable.of(null);
             });
@@ -728,11 +728,11 @@ export class PushStream implements IStream {
 
     private activityWebSocket$(): Observable<IStreamMessage> {
         return this.checkConnection()
-            .flatMap(_ =>
+            .mergeMap(_ =>
                 this.transportWebSocket<IStreamMessage>()
                     // .retryWhen(error$ => error$.mergeMap(error => this.reconnectToConversation()))
             )
-            .flatMap(message => this.observableMessage(message))
+            .mergeMap(message => this.observableMessage(message))
     }
 
     private transportWebSocket<T>() {
@@ -782,11 +782,11 @@ export class PushStream implements IStream {
 
     private activityEventSource$(): Observable<IStreamMessage> {
         return this.checkConnection()
-            .flatMap(_ =>
+            .mergeMap(_ =>
                 this.transportEventSource<IStreamMessage>().share()
                     // .retryWhen(error$ => error$.mergeMap(error => this.reconnectToConversation()))
             )
-            .flatMap(message => this.observableMessage(message));
+            .mergeMap(message => this.observableMessage(message));
     }
 
     private transportEventSource<T>() {

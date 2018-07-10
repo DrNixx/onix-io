@@ -1,6 +1,6 @@
 {
   "name": "onix-io",
-  "version": "1.6.19",
+  "version": "1.6.20",
   "description": "Onix network utilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
