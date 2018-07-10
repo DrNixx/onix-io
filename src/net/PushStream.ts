@@ -1,26 +1,8 @@
+import {of as observableOf, throwError as observableThrowError,  Observable ,  Subscription ,  Subscriber ,  Subject ,  BehaviorSubject } from 'rxjs';
+import {share, mergeMap, filter, tap, map, take, catchError, repeat, retryWhen, delay} from 'rxjs/operators';
+import { ajax } from 'rxjs/ajax';
 import isString from 'lodash-es/isString';
 import isDate from 'lodash-es/isDate';
-
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { Subscriber } from 'rxjs/Subscriber';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { AjaxResponse } from 'rxjs/observable/dom/AjaxObservable';
-import 'rxjs/add/observable/dom/ajax';
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/repeat';
-import 'rxjs/add/operator/retryWhen';
-import 'rxjs/add/operator/share';
-import 'rxjs/add/operator/take';
-
 import { Logger } from 'onix-core';
 import { IStream, IStreamMessage, MessageType, ConnectionStatus } from "onix-app";
 import { dateToUTCString } from 'onix-core';
@@ -571,7 +553,7 @@ export class PushStream implements IStream {
 
         message = escapeText(message);
         
-        Observable.ajax({
+        ajax({
             method: "POST",
             url: this.getPublisherUrl(),
             body: message,
@@ -616,73 +598,73 @@ export class PushStream implements IStream {
             }
         }
         
-        return Observable.of(message);
+        return observableOf(message);
     }
 
     private startConversation() {
         Logger.debug("startConversation");
-        return Observable.of(true);
+        return observableOf(true);
     }
 
     private reconnectToConversation() {
         Logger.debug("reconnectToConversation");
-        return Observable.of(true);
+        return observableOf(true);
     }
 
     private checkConnection(once = false) {
-        let obs = this.connectionStatus$
-        .mergeMap(connectionStatus => {
+        let obs = this.connectionStatus$.pipe(
+        mergeMap(connectionStatus => {
             if (connectionStatus === ConnectionStatus.Uninitialized) {
                 this.connectionStatus$.next(ConnectionStatus.Connecting);
-                return this.startConversation()
-                    .do(conversation => {
+                return this.startConversation().pipe(
+                    tap(conversation => {
                         this.connectionStatus$.next(ConnectionStatus.Online);
                     }, error => {
                         this.connectionStatus$.next(ConnectionStatus.FailedToConnect);
-                    })
-                    .map(_ => connectionStatus);
+                    }),
+                    map(_ => connectionStatus),);
             } else {
-                return Observable.of(connectionStatus);
+                return observableOf(connectionStatus);
             }
-        })
-        .filter(connectionStatus => connectionStatus != ConnectionStatus.Uninitialized && connectionStatus != ConnectionStatus.Connecting)
-        .mergeMap(connectionStatus => {
+        }),
+        filter(connectionStatus => connectionStatus != ConnectionStatus.Uninitialized && connectionStatus != ConnectionStatus.Connecting),
+        mergeMap(connectionStatus => {
             switch (connectionStatus) {
                 case ConnectionStatus.Offline:
-                    return Observable.throw(errorConversationEnded);
+                    return observableThrowError(errorConversationEnded);
 
                 case ConnectionStatus.FailedToConnect:
-                    return Observable.throw(errorFailedToConnect);
+                    return observableThrowError(errorFailedToConnect);
 
                 default:
-                    return Observable.of(null);
+                    return observableOf(null);
             }
-        })
+        }),)
 
-        return once ? obs.take(1) : obs;
+        return once ? obs.pipe(take(1)) : obs;
     }
 
     private activityLongPooling$(): Observable<IStreamMessage> {
-        return this.checkConnection()
-            .mergeMap(_ => 
-                this.transportLongPolling<IStreamMessage>()
-                .repeat()
-                .retryWhen(error$ => error$
-                    .mergeMap(error => {
+        return this.checkConnection().pipe(
+            mergeMap(_ => 
+                this.transportLongPolling<IStreamMessage>().pipe(
+                repeat(),
+                retryWhen(error$ => error$.pipe(
+                    mergeMap(error => {
                         if ((error.status === 0) || (error.status === 304)) {
-                            return Observable.of(error);
+                            return observableOf(error);
                         } else {
                             this.connectionStatus$.next(ConnectionStatus.Offline);
-                            return Observable.throw(error);
+                            return observableThrowError(error);
                         }
-                    })
-                    .delay(1)
-                )
-            )
-            .mergeMap(message => this.observableMessage(message))
-            .catch(error => {
-                return Observable.of(null);
-            });
+                    }),
+                    delay(1),)
+                ),)
+            ),
+            mergeMap(message => this.observableMessage(message)),
+            catchError(error => {
+                return observableOf(null);
+            }),);
     }
 
     private transportLongPolling<T>() {
@@ -693,7 +675,7 @@ export class PushStream implements IStream {
                 headers: this.getRequestHeaders()
             };
 
-            Observable.ajax({
+            ajax({
                 method: "GET",
                 url: params.url,
                 timeout: this.timeout * 2,
@@ -702,13 +684,13 @@ export class PushStream implements IStream {
                     ...params.headers,
                     "Accept": "application/json"
                 },
-            })
-            .do((ajaxResponse: AjaxResponse) => {
+            }).pipe(
+            tap((ajaxResponse) => {
                 if (!this.messagesControlByArgument) {
                     this._etag = ajaxResponse.xhr.getResponseHeader('Etag');
                     this._lastModified = ajaxResponse.xhr.getResponseHeader('Last-Modified');
                 }
-            })
+            }))
             .subscribe(
                 ajaxResponse => {
                     if (ajaxResponse.response) {
@@ -727,12 +709,13 @@ export class PushStream implements IStream {
     }
 
     private activityWebSocket$(): Observable<IStreamMessage> {
-        return this.checkConnection()
-            .mergeMap(_ =>
+        return this.checkConnection().pipe(
+            mergeMap(_ =>
                 this.transportWebSocket<IStreamMessage>()
                     // .retryWhen(error$ => error$.mergeMap(error => this.reconnectToConversation()))
-            )
-            .mergeMap(message => this.observableMessage(message))
+            ),
+            mergeMap(message => this.observableMessage(message))
+        );
     }
 
     private transportWebSocket<T>() {
@@ -781,12 +764,12 @@ export class PushStream implements IStream {
     }
 
     private activityEventSource$(): Observable<IStreamMessage> {
-        return this.checkConnection()
-            .mergeMap(_ =>
-                this.transportEventSource<IStreamMessage>().share()
+        return this.checkConnection().pipe(
+            mergeMap(_ =>
+                this.transportEventSource<IStreamMessage>().pipe(share())
                     // .retryWhen(error$ => error$.mergeMap(error => this.reconnectToConversation()))
-            )
-            .mergeMap(message => this.observableMessage(message));
+            ),
+            mergeMap(message => this.observableMessage(message)),);
     }
 
     private transportEventSource<T>() {

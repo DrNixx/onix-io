@@ -1,6 +1,6 @@
 {
   "name": "onix-io",
-  "version": "1.6.20",
+  "version": "2.7.21",
   "description": "Onix network utilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,8 +32,7 @@
     "lodash-es": "^4.17.10",
     "onix-app": "^1.5.19",
     "onix-core": "^1.6.39",
-    "rxjs": "^6.2.1",
-    "rxjs-compat": "^6.2.1"
+    "rxjs": "^6.2.1"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.0",

@@ -1,13 +1,8 @@
-import { Observable } from 'rxjs/internal/Observable';
-import { Subscription } from 'rxjs/internal/Subscription';
-import { Subscriber } from 'rxjs/internal/Subscriber';
-import { Subject, AnonymousSubject } from 'rxjs/internal/Subject';
-import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
-import { Operator } from 'rxjs/internal/Operator';
-import { Observer, NextObserver } from 'rxjs/internal/types';
-import { root } from 'rxjs/internal/util/root';
+import { NextObserver, Subject, Observable, Observer, ReplaySubject, Operator, Subscription, Subscriber } from 'rxjs';
+import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { tryCatch } from 'rxjs/internal/util/tryCatch';
 import { errorObject } from 'rxjs/internal/util/errorObject';
+import { root } from 'rxjs/internal/util/root';
 
 export interface EventSourceSubjectConfig {
   url: string;
