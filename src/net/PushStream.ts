@@ -191,7 +191,7 @@ export class PushStream implements IStream {
 
     private connectAttemps = 0;
 
-    public connectionStatus$: BehaviorSubject<ConnectionStatus> = new BehaviorSubject(ConnectionStatus.Uninitialized);
+    public connectionStatus$: BehaviorSubject<ConnectionStatus> = null;
 
     public transports: TransportType[] = [];
 
@@ -205,6 +205,8 @@ export class PushStream implements IStream {
 
     constructor(settings: IPushStreamSettings) {
         settings = settings || {};
+
+        this.connectionStatus$ = new BehaviorSubject(ConnectionStatus.Uninitialized);
 
         this.id = PushStreamManager.push(this) - 1;
 
