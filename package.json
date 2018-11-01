@@ -1,6 +1,6 @@
 {
   "name": "onix-io",
-  "version": "2.7.22",
+  "version": "2.7.23",
   "description": "Onix network utilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
