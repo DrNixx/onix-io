@@ -4,7 +4,7 @@ import isFunction from 'lodash-es/isFunction';
 let last_hash = null;
 let saved_hash = null;
 let cache_bust = 1;
-let listenerLoop: number = 0;
+let listenerLoop: number;
 
 // A var used in awesome browsers.
 let rm_callback = null;
@@ -72,19 +72,19 @@ export const onixReceiveMessage = p_receiveMessage = function(callback, source_o
     } else {
         // Since the browser sucks, a polling loop will be started, and the
         // callback will be called whenever the location.hash changes.
-        listenerLoop && clearInterval(listenerLoop);
+        listenerLoop && window.clearInterval(listenerLoop);
         listenerLoop = null;
         saved_hash = document.location.hash;
 
         if (callback) {
             saved_hash = document.location.hash;
             delay = typeof source_origin === 'number' ? source_origin : typeof delay === 'number' ? delay : 100;
-            listenerLoop = setInterval(function() {
+            listenerLoop = window.setInterval(function() {
                 var hash = document.location.hash, re = /^#?\d+&/;
                 if (hash !== last_hash && re.test(hash)) {
                     last_hash = hash;
                     callback({ data: hash.replace(re, '') });
-                    clearInterval(listenerLoop);
+                    window.clearInterval(listenerLoop);
                     document.location.hash = saved_hash;
                 }
             }, delay);

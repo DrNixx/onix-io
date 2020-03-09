@@ -173,7 +173,7 @@ export class PushStream implements IStream {
 
     private connectAttemps = 0;
 
-    public connectionStatus$: BehaviorSubject<ConnectionStatus> = null;
+    public connectionStatus$: BehaviorSubject<number> = null;
 
     public transports: TransportType[] = [];
 
